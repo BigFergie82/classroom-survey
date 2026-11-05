@@ -1,0 +1,41 @@
+name: Build, test, and deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+        env:
+          PUBLIC_BASE_PATH: /classroom-survey/
+          VITE_SUPABASE_URL: https://gfnofkyddvfskeiemujl.supabase.co
+          # This is a PUBLIC client key, protected by database grants and RLS.
+          # Never substitute a service-role key here.
+          VITE_SUPABASE_ANON_KEY: sb_publishable_yn3eDbeoWOQxRu7bh_2G5Q_zrWK0k7g
+      - run: cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

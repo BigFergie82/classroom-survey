@@ -1,0 +1,19 @@
+# AI development history
+
+This is a factual summary of this ChatGPT/Codex interaction, not an exported Cursor transcript. Date: November 5, 2026.
+
+1. The user asked the agent to review the pasted assignment and supporting files and complete the assignment.
+2. The agent read the assignment, overall specification, database design, API design, UI requirements, and supplied TODO. It identified the required deliverables: a persistent survey app, source repository, public deployment, development summary, interaction history, and database screenshots.
+3. Initial computer access was stopped because the browser URL could not be confidently determined. No source implementation was produced in that first attempt. The user opened Supabase and asked the agent to continue.
+4. The agent implemented a new React/TypeScript/Vite frontend, instructor authentication integration, draft editor, survey lifecycle, QR presentation, anonymous student form, results, and CSV export. It wrote the PostgreSQL migration and RLS policies, plus transactional RPCs for saving, activation, closure, and submission.
+5. The terminal could not resolve the npm registry. An offline-cache install was attempted but lacked the Supabase dependency. The agent asked the user to install dependencies outside the restricted terminal; the user reported "installed".
+6. The agent ran the production build. It found and corrected missing JSX expression braces and TypeScript issues involving the Auth response union and imported result types. The subsequent TypeScript/Vite production build passed.
+7. The agent added and ran three tests for result percentages, zero-count choices, unanswered questions, CSV metadata, escaping, and spreadsheet-formula protection. All three passed.
+8. Supabase sign-in succeeded through the user's browser session and a free organization was created. Project provisioning required a new database password, so the agent handed that step to the user without requesting the password in chat.
+9. The user created the Supabase project and a private instructor account. The agent applied the five-table schema and RPC migration through the SQL Editor, disabled public signup, and configured the local frontend using the public project URL and publishable key. The user reported signing into the application on port 5174.
+10. The agent ran `supabase/verify.sql` against the live database using simulated authenticated and anonymous database roles. The result was PASS for lifecycle transitions, the active-survey rule, active-content RLS, atomic submission, duplicate and missing-answer rejection, result privacy, direct-write restrictions, and rejection after closure. The transaction rolled back all test data. This verifies database behavior, not the complete browser workflow.
+11. Browser attachment to the signed-in in-app tab failed, and an app-window access request timed out. The agent continued database verification through the existing Chrome session rather than claiming unobserved browser tests passed.
+12. GitHub's repository creation form returned "Something went wrong!"; the agent checked for the intended repository through the connected GitHub API and received a 404. Deployment remains pending until source publication succeeds.
+13. The user created the public repository and supplied its URL. The agent verified its initial commit and repository contents. The connected GitHub app could read it but returned HTTP 403 ("Resource not accessible by integration") when asked to write the source. Terminal Git could not resolve github.com. The agent prepared a local Git checkout that preserves the repository's verified initial history, included the six reference documents, and prepared the source for a normal push through the user's terminal.
+
+Update this document after actual deployment and acceptance testing with the observed results, including any further debugging. Do not invent prompts or describe suggested tests as executed tests.

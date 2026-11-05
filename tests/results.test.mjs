@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {choiceStats,csvCell,makeCsv} from '../src/lib/results.mjs';
+const question={id:'q',question_text:'A, "question"',choices:[{id:'a',choice_text:'One'},{id:'b',choice_text:'Two'}]};
+test('percentages use all responses and retain zero-count choices',()=>{assert.deepEqual(choiceStats(question,[{answers:[{question_id:'q',choice_id:'a'}]},{answers:[]}]).map(c=>[c.count,c.percentage]),[[1,50],[0,0]]);assert.equal(choiceStats(question,[])[0].percentage,0);});
+test('CSV escapes quotes, commas, line breaks, and spreadsheet formulas',()=>{assert.equal(csvCell('a,"b"\nc'),'"a,""b""\nc"');assert.equal(csvCell(' =SUM(A1:A2)'),'"\' =SUM(A1:A2)"');});
+test('CSV includes survey metadata, timestamp and unanswered questions',()=>{const csv=makeCsv({id:'s',title:'Test',status:'closed',questions:[question]},[{id:'r',submitted_at:'2026-11-05',answers:[]}]);assert.ok(csv.includes('"survey_title"'));assert.ok(csv.includes('"2026-11-05","Unanswered"'));assert.ok(csv.includes('"A, ""question"""'));});
